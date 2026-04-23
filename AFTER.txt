@@ -1,0 +1,29 @@
+AFTER FIXES
+===========
+
+Direct DB query (same as before, unchanged):
+ tenant_id | property_id |  total   | count 
+-----------+-------------+----------+-------
+ tenant-a  | prop-001    | 2250.000 |     4
+ tenant-a  | prop-002    | 4975.500 |     4
+ tenant-a  | prop-003    | 6100.500 |     2
+ tenant-b  | prop-004    | 1776.500 |     4
+ tenant-b  | prop-005    | 3256.000 |     3
+(5 rows)
+
+
+API responses:
+
+  Sunset (tenant-a) prop-001:
+    -> {"property_id":"prop-001","total_revenue":"2250.00","currency":"USD","reservations_count":4}
+  Ocean (tenant-b) prop-001 (same property_id, different tenant):
+    -> {"property_id":"prop-001","total_revenue":"0.00","currency":"USD","reservations_count":0}
+  Sunset (tenant-a) prop-002:
+    -> {"property_id":"prop-002","total_revenue":"4975.50","currency":"USD","reservations_count":4}
+  Ocean (tenant-b) prop-004:
+    -> {"property_id":"prop-004","total_revenue":"1776.50","currency":"USD","reservations_count":4}
+Redis keys after priming:
+revenue:tenant-b:prop-001
+revenue:tenant-b:prop-004
+revenue:tenant-a:prop-002
+revenue:tenant-a:prop-001

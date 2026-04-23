@@ -1,0 +1,23 @@
+BEFORE FIXES
+============
+
+Direct DB query (ground truth):
+
+ tenant_id | property_id |  total   | count
+-----------+-------------+----------+-------
+ tenant-a  | prop-001    | 2250.000 |     4
+ tenant-a  | prop-002    | 4975.500 |     4
+ tenant-a  | prop-003    | 6100.500 |     2
+ tenant-b  | prop-004    | 1776.500 |     4
+ tenant-b  | prop-005    | 3256.000 |     3
+
+API responses:
+
+  Sunset (tenant-a) GET /dashboard/summary?property_id=prop-001
+    -> {"property_id":"prop-001","total_revenue":1000.0,"currency":"USD","reservations_count":3}
+
+  Ocean (tenant-b) GET /dashboard/summary?property_id=prop-001
+    -> {"property_id":"prop-001","total_revenue":1000.0,"currency":"USD","reservations_count":3}
+
+Both tenants return the same wrong number for prop-001.
+DB says 2250 for Sunset and 0 for Ocean.
